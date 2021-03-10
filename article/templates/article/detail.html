@@ -1,0 +1,45 @@
+{% extends "article/base.html" %}
+{% load social_share %}
+{% load static %}
+{% block content %}
+{% for note in notes %}
+  {% if note.category == 'punyatithi' %}
+    <div class="content-section1" style="background-image:url('{% static 'article/img/punyatithi-bg.png' %}');background-position: center top;background-repeat:no-repeat;backgorund-size: cover;">
+  {% else %}
+    <div class="content-section1" style="background-image:url('{% static 'article/img/shraddha-bg.png' %}');background-position: center top;background-repeat:no-repeat;backgorund-size: cover;">
+  {% endif %}
+      <center>
+        <img class="rounded-circle account-img" src="{{ note.image.url }}" style="margin-top:230px;">
+      </center>
+      <div style="text-align:center">
+          <p class="mr-2" style="font-size:40px;color:black;"><b>{{ note.name }}</b></p>
+          <p style="font-size:20px;"><b>Date:-</b>  {{note.date|date:"F d,Y"}}</p>
+          {{ note.extra_information|safe }}
+      </div>
+    </div>
+
+  {% if note.creator == user %}
+    <div>
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'note-update' note.slug %}">Update</a>
+      <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'note-delete' note.slug %}">Delete</a>
+    </div>
+  {% endif %}
+  <span>
+    <div class="homeContainer" style="margin-top:10px;">
+      <div class="box">
+        {% post_to_whatsapp object_or_url "<i class='fa fa-whatsapp fa-3x' style='color:green;'></i>" %}
+      </div>
+      <div class="box">
+        {% post_to_facebook object_or_url "<i class='fa fa-facebook fa-3x' style='color:blue;'></i>" %}
+      </div>
+      <div class="box">
+        {% post_to_twitter '' object_or_url "<i class='fa fa-twitter fa-3x' style='color:blue;' aria-hidden='true'></i>" %}
+      </div>
+      <div class="box">
+        {% post_to_telegram '' object_or_url "<i class='fa fa-telegram fa-3x' style='color:blue;'></i>" %}
+      </div>
+    </div>
+  </span>
+{% endfor %}
+<br>
+{% endblock content %}
